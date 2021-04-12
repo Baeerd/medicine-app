@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.app.goods.mapper.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.app.goods.entity.Goods" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="created_dt" property="createdDt" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="goods_type" property="goodsType" jdbcType="VARCHAR" />
+    <result column="shops_id" property="shopsId" jdbcType="BIGINT" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id,created_dt,created_by,name,remark,num,price,image,
+    goods_type,shops_id
+  </sql>
+
+
+  <insert id="insert" parameterType="com.app.goods.entity.Goods" >
+    insert into goods (created_dt,created_by,
+      name,remark,num,
+      price,image,goods_type,
+      shops_id)
+    values (#{createdDt,jdbcType=TIMESTAMP},#{createdBy,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{num,jdbcType=DECIMAL},
+      #{price,jdbcType=DOUBLE},#{image,jdbcType=VARCHAR},#{goodsType,jdbcType=VARCHAR},
+      #{shopsId,jdbcType=BIGINT})
+  </insert>
+
+  <update id="update" parameterType="com.app.goods.entity.Goods" >
+    update goods
+      <set>
+          <if test="id != null" >
+              id = #{id,jdbcType=BIGINT},
+          </if>
+          <if test="createdDt != null" >
+              created_dt = #{createdDt,jdbcType=TIMESTAMP},
+          </if>
+          <if test="createdBy != null" >
+              created_by = #{createdBy,jdbcType=VARCHAR},
+          </if>
+          <if test='name != null and name != ""' >
+              name = #{name,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null" >
+              remark = #{remark,jdbcType=VARCHAR},
+          </if>
+          <if test="num != null" >
+              num = #{num,jdbcType=DECIMAL},
+          </if>
+          <if test="price != null" >
+              price = #{price,jdbcType=DOUBLE},
+          </if>
+          <if test="image != null" >
+              image = #{image,jdbcType=VARCHAR},
+          </if>
+          <if test='goodsType != null and goodsType != ""' >
+              goods_type = #{goodsType,jdbcType=VARCHAR},
+          </if>
+          <if test="shopsId != null" >
+              shops_id = #{shopsId,jdbcType=BIGINT},
+          </if>
+      </set>
+  		where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="delete" parameterType="com.app.goods.entity.Goods" >
+    delete from goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="find" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select
+		<include refid="Base_Column_List" />
+	from goods
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		      <if test="id != null" >
+		        and id = #{id,jdbcType=BIGINT}
+		      </if>
+		      <if test="createdDt != null" >
+		        and created_dt = #{createdDt,jdbcType=TIMESTAMP}
+		      </if>
+		      <if test="createdBy != null" >
+		        and created_by = #{createdBy,jdbcType=VARCHAR}
+		      </if>
+		      <if test='name != null and name != ""' >
+		        and name like '%${name}%'
+		      </if>
+		      <if test="remark != null" >
+		        and remark = #{remark,jdbcType=VARCHAR}
+		      </if>
+		      <if test="num != null" >
+		        and num = #{num,jdbcType=DECIMAL}
+		      </if>
+		      <if test="price != null" >
+		        and price = #{price,jdbcType=DOUBLE}
+		      </if>
+		      <if test="image != null" >
+		        and image = #{image,jdbcType=VARCHAR}
+		      </if>
+		      <if test='goodsType != null and goodsType != ""' >
+		        and goods_type = #{goodsType,jdbcType=VARCHAR}
+		      </if>
+		      <if test="shopsId != null" >
+		        and shops_id = #{shopsId,jdbcType=BIGINT}
+		      </if>
+	      </trim>
+	order by id desc
+  </select>
+    
+    <select id="findCounts" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+        count(0)
+        from goods
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="id != null" >
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="createdDt != null" >
+                and created_dt = #{createdDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createdBy != null" >
+                and created_by = #{createdBy,jdbcType=VARCHAR}
+            </if>
+            <if test='name != null and name != ""' >
+                and name like '%${name}%'
+            </if>
+            <if test="remark != null" >
+                and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="num != null" >
+                and num = #{num,jdbcType=DECIMAL}
+            </if>
+            <if test="price != null" >
+                and price = #{price,jdbcType=DOUBLE}
+            </if>
+            <if test="image != null" >
+                and image = #{image,jdbcType=VARCHAR}
+            </if>
+            <if test='goodsType != null and goodsType != ""' >
+                and goods_type = #{goodsType,jdbcType=VARCHAR}
+            </if>
+            <if test="shopsId != null" >
+                and shops_id = #{shopsId,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </select>
+
+    <update id="updateGoodsNum" parameterType="java.lang.String">
+      update Goods set num = num ${numFlag} where id = ${goodsId}
+    </update>
+</mapper>

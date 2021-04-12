@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.app.car.mapper.ShoppingCarMapper" >
+  <resultMap id="BaseResultMap" type="com.app.car.entity.ShoppingCar" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="created_dt" property="createdDt" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+    <result column="num" property="num" jdbcType="DECIMAL" />
+
+    <result column="goodsName" property="goods.name" jdbcType="VARCHAR" />
+    <result column="remark" property="goods.remark" jdbcType="VARCHAR" />
+    <result column="price" property="goods.price" jdbcType="VARCHAR" />
+    <result column="image" property="goods.image" jdbcType="VARCHAR" />
+    <result column="goods_type" property="goods.goodsType" jdbcType="VARCHAR" />
+    <result column="shops_id" property="goods.shopsId" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    c.id,c.created_dt,c.created_by,c.user_id,c.goods_id,c.num,g.name goodsName, g.remark, g.price, g.image, g.goods_type, g.shops_id
+  </sql>
+
+
+  <insert id="insert" parameterType="com.app.car.entity.ShoppingCar" >
+    insert into shopping_car (created_dt,created_by,
+      user_id,goods_id,num)
+    values (#{createdDt,jdbcType=TIMESTAMP},#{createdBy,jdbcType=VARCHAR},
+      #{userId,jdbcType=BIGINT},#{goodsId,jdbcType=BIGINT},#{num,jdbcType=DECIMAL})
+  </insert>
+
+  <update id="update" parameterType="com.app.car.entity.ShoppingCar" >
+    update shopping_car
+      <set>
+          <if test="id != null" >
+              id = #{id,jdbcType=BIGINT},
+          </if>
+          <if test="createdDt != null" >
+              created_dt = #{createdDt,jdbcType=TIMESTAMP},
+          </if>
+          <if test="createdBy != null" >
+              created_by = #{createdBy,jdbcType=VARCHAR},
+          </if>
+          <if test="userId != null" >
+              user_id = #{userId,jdbcType=BIGINT},
+          </if>
+          <if test="goodsId != null" >
+              goods_id = #{goodsId,jdbcType=BIGINT},
+          </if>
+          <if test="num != null" >
+              num = #{num,jdbcType=DECIMAL},
+          </if>
+      </set>
+  		where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="delete" parameterType="com.app.car.entity.ShoppingCar" >
+    delete from shopping_car
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="find" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select
+		<include refid="Base_Column_List" />
+	from shopping_car c join goods g on c.goods_id = g.id
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		      <if test="id != null" >
+		        and id = #{id,jdbcType=BIGINT}
+		      </if>
+		      <if test="createdDt != null" >
+		        and created_dt = #{createdDt,jdbcType=TIMESTAMP}
+		      </if>
+		      <if test="createdBy != null" >
+		        and created_by = #{createdBy,jdbcType=VARCHAR}
+		      </if>
+		      <if test="userId != null" >
+		        and user_id = #{userId,jdbcType=BIGINT}
+		      </if>
+		      <if test="goodsId != null" >
+		        and goods_id = #{goodsId,jdbcType=BIGINT}
+		      </if>
+		      <if test="num != null" >
+		        and num = #{num,jdbcType=DECIMAL}
+		      </if>
+	      </trim>
+	order by id desc
+  </select>
+
+    <update id="updateCarNum" parameterType="java.lang.String">
+        update shopping_car set num = num ${numFlag} where id = ${id}
+    </update>
+
+    <select id="findCounts" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+        count(0)
+        from shopping_car
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="id != null" >
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="createdDt != null" >
+                and created_dt = #{createdDt,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createdBy != null" >
+                and created_by = #{createdBy,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null" >
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="goodsId != null" >
+                and goods_id = #{goodsId,jdbcType=BIGINT}
+            </if>
+            <if test="num != null" >
+                and num = #{num,jdbcType=DECIMAL}
+            </if>
+        </trim>
+    </select>
+</mapper>

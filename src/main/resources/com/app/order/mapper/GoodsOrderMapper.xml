@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.app.order.mapper.GoodsOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.app.order.entity.GoodsOrder" >
+      <id column="id" property="id" jdbcType="BIGINT" />
+      <result column="created_dt" property="createdDt" jdbcType="TIMESTAMP" />
+      <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+      <result column="total_price" property="totalPrice" jdbcType="DOUBLE" />
+      <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+      <result column="user_id" property="userId" jdbcType="DECIMAL" />
+      <result column="num" property="num" jdbcType="DECIMAL" />
+      <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+
+      <result column="goodsName" property="goods.name" jdbcType="VARCHAR" />
+      <result column="remark" property="goods.remark" jdbcType="VARCHAR" />
+      <result column="price" property="goods.price" jdbcType="VARCHAR" />
+      <result column="image" property="goods.image" jdbcType="VARCHAR" />
+      <result column="goods_type" property="goods.goodsType" jdbcType="VARCHAR" />
+      <result column="shops_id" property="goods.shopsId" jdbcType="VARCHAR" />
+      <result column="goods_id" property="goods.id" jdbcType="DECIMAL" />
+
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    o.id,o.created_dt,o.created_by,o.total_price,o.order_no,o.user_id,o.goods_id,o.num,o.order_type,
+    g.name goodsName, g.remark, g.price, g.image, g.goods_type, g.shops_id
+  </sql>
+
+
+  <insert id="insert" parameterType="com.app.order.entity.GoodsOrder" >
+    insert into goods_order (created_dt,created_by,
+      total_price,order_no,user_id,goods_id,num,order_type)
+    values (#{createdDt,jdbcType=TIMESTAMP},#{createdBy,jdbcType=VARCHAR},
+      #{totalPrice,jdbcType=DOUBLE},#{orderNo,jdbcType=VARCHAR},
+      #{userId,jdbcType=DECIMAL},#{goodsId,jdbcType=DECIMAL},
+      #{num,jdbcType=DECIMAL},#{orderType,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.app.order.entity.GoodsOrder" >
+    update goods_order
+      <set>
+          <if test="id != null" >
+              id = #{id,jdbcType=BIGINT},
+          </if>
+          <if test="createdDt != null" >
+              created_dt = #{createdDt,jdbcType=TIMESTAMP},
+          </if>
+          <if test="createdBy != null" >
+              created_by = #{createdBy,jdbcType=VARCHAR},
+          </if>
+          <if test="totalPrice != null" >
+              total_price = #{totalPrice,jdbcType=DOUBLE},
+          </if>
+          <if test="orderNo != null" >
+              order_no = #{orderNo,jdbcType=VARCHAR},
+          </if>
+          <if test="userId != null" >
+              user_id = #{userId,jdbcType=DECIMAL},
+          </if>
+          <if test="goodsId != null" >
+              goods_Id = #{goodsId,jdbcType=DECIMAL},
+          </if>
+          <if test="num != null" >
+              num = #{num,jdbcType=DECIMAL},
+          </if>
+          <if test="orderType != null" >
+              order_type = #{orderType,jdbcType=VARCHAR},
+          </if>
+      </set>
+  		where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="delete" parameterType="com.app.order.entity.GoodsOrder" >
+    delete from goods_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="find" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select
+		<include refid="Base_Column_List" />
+	from goods_order o join goods g on g.id = o.goods_id
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		      <if test="id != null" >
+		        and o.id = #{id,jdbcType=BIGINT}
+		      </if>
+		      <if test="createdDt != null" >
+		        and o.created_dt = #{createdDt,jdbcType=TIMESTAMP}
+		      </if>
+		      <if test="createdBy != null" >
+		        and o.created_by = #{createdBy,jdbcType=VARCHAR}
+		      </if>
+		      <if test="totalPrice != null" >
+		        and o.total_price = #{totalPrice,jdbcType=DOUBLE}
+		      </if>
+		      <if test="orderNo != null" >
+		        and o.order_no = #{orderNo,jdbcType=VARCHAR}
+		      </if>
+		      <if test="userId != null" >
+		        and o.user_id = #{userId,jdbcType=DECIMAL}
+		      </if>
+		      <if test="goodsId != null" >
+		        and o.goodsId = #{goodsId,jdbcType=DECIMAL}
+		      </if>
+		      <if test="num != null" >
+		        and o.num = #{num,jdbcType=DECIMAL}
+		      </if>
+		      <if test="orderType != null" >
+		        and o.order_type = #{orderType,jdbcType=VARCHAR}
+		      </if>
+	      </trim>
+	order by id desc
+  </select>
+  
+  <select id="findCounts" parameterType="java.util.Map" resultType="java.lang.Integer">
+  select
+ 	 count(0)
+	from goods_order o join goods g on g.id = o.goods_id
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+		      <if test="id != null" >
+		        and o.id = #{id,jdbcType=BIGINT}
+		      </if>
+		      <if test="createdDt != null" >
+		        and o.created_dt = #{createdDt,jdbcType=TIMESTAMP}
+		      </if>
+		      <if test="createdBy != null" >
+		        and o.created_by = #{createdBy,jdbcType=VARCHAR}
+		      </if>
+		      <if test="totalPrice != null" >
+		        and o.total_price = #{totalPrice,jdbcType=DOUBLE}
+		      </if>
+		      <if test="orderNo != null" >
+		        and o.order_no = #{orderNo,jdbcType=VARCHAR}
+		      </if>
+		      <if test="userId != null" >
+		        and o.user_id = #{userId,jdbcType=DECIMAL}
+		      </if>
+		      <if test="goodsId != null" >
+		        and o.goodsId = #{goodsId,jdbcType=DECIMAL}
+		      </if>
+		      <if test="num != null" >
+		        and o.num = #{num,jdbcType=DECIMAL}
+		      </if>
+		      <if test="orderType != null" >
+		        and o.order_type = #{orderType,jdbcType=VARCHAR}
+		      </if>
+	      </trim>
+  </select>
+  
+</mapper>
